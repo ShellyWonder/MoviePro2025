@@ -1,0 +1,72 @@
+﻿@*TopNavMenuComponent*@
+
+<nav class="navbar navbar-expand-lg navStyle" data-bs-theme="dark">
+    <div class="container-xxl">
+        <a href="/" class="me-3">
+            <img src="/img/logoMarkWhite.png" alt="Logo" class="logo" height="40"/>
+        </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+            data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" 
+            aria-label="Toggle Navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                     <i class="bi bi-house"></i> 
+                     <span>Home</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/counter">
+                        <i class="bi bi-stopwatch"></i>
+                        <span>Counter</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/weather" >
+                        <i class="bi bi-cloud"></i>
+                        <span>Weather</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/themes">
+                        <i class="bi bi-palette"></i>
+                        <span>Template Themes</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-stack"></i>
+                        <span>Dropdown</span>
+                    </a>
+                    <ul class="dropdown-menu text-nowrap px-2 m-2">
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="#">
+                                <i class="bi bi-person"></i>
+                                <span>Dropdown link 1</span>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="#">
+                                <i class="bi bi-person"></i>
+                                <span>Dropdown link 2</span>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="#">
+                                <i class="bi bi-person"></i>
+                                <span>Dropdown link 3</span>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
+                </ul>
+            </div>
+    </div>
+</nav>
+
+@code {
+
+}
