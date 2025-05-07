@@ -3,16 +3,21 @@
     color: var(--sjw-footer-font-color);
 }
 
+.tmdbLogoText {
+    color: var(--sjw-theme-300);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
 .footerStyle a {
     color: var(--sjw-theme-200);
 }
 
-.footerStyle a:hover{
-    color: var(--sjw-theme-core);
-}
+    .footerStyle a:hover {
+        color: var(--sjw-theme-core);
+    }
 
 .bi {
     font-size: 1.5rem;
     padding-inline-start: .5rem;
 }
-

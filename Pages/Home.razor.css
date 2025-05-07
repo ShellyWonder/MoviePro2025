@@ -1,14 +1,8 @@
-﻿.pageStyle {
-    background: url(/img/LandingPageBG.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
-
+﻿
 .title {
     font-family: var(--sjw-title-font);
     font-size: 3rem;
-    color: var(--sjw-title-color);
+    color: var(--sjw-light-color);
     line-height: 3rem;
 }
 
@@ -17,13 +11,16 @@
     font-family: var(--sjw-body-font);
 }
 
+.cta{
+    color: var(--sjw-light-color)
+}
+
 .devicons {
     font-size: 2.5rem;
 }
 
 @media (max-width: 992px) {
     .title {
-
         font-size: 3.5rem;
         line-height: 4rem;
         margin-top: 1rem;

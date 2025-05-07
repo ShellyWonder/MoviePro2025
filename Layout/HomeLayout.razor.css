@@ -1,0 +1,8 @@
+﻿.homeStyle {
+    /* top layer: semi-opaque gradient; bottom layer: film-strip tile */
+    background: linear-gradient( to right, rgba(159, 88, 175, 0.9) 0%, rgba(1, 25, 64, 0.7) 45%, rgba(1, 25, 64, 0.9) 100% ), url('/img/film_strip_bkgrd.png') center center repeat;
+    /* Make sure the gradient fills; let the strip tile at its natural size */
+    background-size: auto, auto;
+    min-height: 100vh;
+    color: var(--sjw-light-color);
+}

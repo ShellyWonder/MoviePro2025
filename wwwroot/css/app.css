@@ -2,8 +2,13 @@
     --sjw-title-font: 'Bebas Neue', sans-serif;
     --sjw-body-font: 'Montserrat', sans-serif;
     --sjw-font-size: 1.1rem;
+    --sjw-dark-color: #212121;
+    --sjw-light-color: #deeefb;
     --sjw-title-color: var(--sjw-dark-color);
-    
+    --sjw-font-size: 1rem;
+    --sjw-btn-homebg: hsl(32, 85%, 55%);
+    --sjw-btn-homehover: hsl(32, 85%, 45%);
+    --sjw-btn-homeactive: hsl(32, 85%, 35%);
 }
 
 
@@ -23,6 +28,20 @@ h1, h2, h3, h4, h5, h6 {
 .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: var(--sjw-title-font);
     color: var(--sjw-dark-color);
+}
+
+.btn-home {
+    --bs-btn-bg: var(--sjw-btn-homebg);
+    --bs-btn-border-color: var(--sjw-btn-homebg);
+    --bs-btn-hover-bg: var(--sjw-btn-homehover);
+    --bs-btn-hover-border-color: var(--sjw-btn-homehover);
+    --bs-btn-active-bg: var(--sjw-btn-homeactive);
+    --bs-btn-active-border-color: var(--sjw-btn-homeactive);
+    --bs-btn-disabled-bg: var(--sjw-btn-homebg);
+    --bs-btn-disabled-border-color: var(--sjw-btn-homebg);
+    --bs-btn-hover-color: var(--sjw-dark-color);
+    color: var(--sjw-dark-color);
+    box-shadow: 0 4px 6px hsla(32, 85%, 25%, 0.3);
 }
 
 /*ensures flex box works properly*/
