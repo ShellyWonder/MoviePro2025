@@ -1,6 +1,8 @@
 ﻿@* NowPlaying *@
-@using Microsoft.AspNetCore.Components.Web
 @page "/now-playing"
+@using Microsoft.AspNetCore.Components.Web
+@inject TMDBClientService TMDBClientService
+
 <PageTitle>Now Playing</PageTitle>
 
 <div class="container-xxl py-3">
@@ -11,17 +13,54 @@
     <p class="lead italic">
         Movies now playing in theaters.
     </p>
-    <div class="row g-3  row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-        @for (int i = 1; i <= 20; i++)
-        {
-            <div class="col">
-                <MovieCardComponent />
-            </div>
-        }
-       
-    </div>
+
+    @if (isLoading)
+    {
+        <h2>Loading Movies . . </h2>
+    }
+    else if (nowPlayingMovies?.Results is not null)
+    {
+        <div class="row g-3  row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            @foreach (var movie in nowPlayingMovies!.Results)
+            {
+                <div class="col">
+                    <MovieCardComponent Movie="movie" />
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Movies are not currently available.
+        </div>
+    }
+
 </div>
 
 @code {
+    private MovieListResponse? nowPlayingMovies;
+    private bool isLoading = true;
 
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged();
+            nowPlayingMovies = await TMDBClientService.GetNowPlayingAsync();
+        }
+        catch (Exception ex)
+        {
+
+            Console.Error.WriteLine($"Error loading movies: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+
+    }
 }

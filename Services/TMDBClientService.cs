@@ -11,19 +11,21 @@ namespace MoviePro2025.Services
     public class TMDBClientService
     {
         private readonly HttpClient _httpClient;
+        private readonly string _baseImageUrl;
+        private const string _defaultPosterPath = "/img/PosterPlaceHolder.png"; // Default poster path if none is provided
 
         #region CONSTRUCTOR/CONFIG
         public TMDBClientService(HttpClient httpClient, IConfiguration config)
         {
             _httpClient = httpClient;
+            _baseImageUrl = config["TMDBBaseImageUrl"] ?? _defaultPosterPath; // Provide a default if needed
 
             _httpClient.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+
             _httpClient.DefaultRequestHeaders.Accept.Add(new("application/json"));
 
             string apiKey = config["TMDBKey"] ?? throw new Exception("TMDBKey not found.");
             _httpClient.DefaultRequestHeaders.Authorization = new("Bearer", apiKey);
-           
-            
         }
         #endregion
 
@@ -32,21 +34,10 @@ namespace MoviePro2025.Services
         {
             page = MovieCount(page);
 
-
             var response = await _httpClient.GetFromJsonAsync<MovieListResponse>($"movie/now_playing?page={page}&region=US&language=en-US")
                                                     ?? throw new Exception("No movie data returned");
 
-            foreach (Movie movie in response.Results)
-            {
-                if (string.IsNullOrWhiteSpace(movie.PosterPath))
-                {
-                    movie.PosterPath = "/img/PosterPlaceHolder.png";
-                }
-                else
-                {
-                    movie.PosterPath = $"https://image.tmdb.org/t/p/w500{ movie.PosterPath}";
-                }
-            }
+            ProcessMoviePosters(response.Results);
             return response;
 
         }
@@ -191,12 +182,24 @@ namespace MoviePro2025.Services
         //}
         //#endregion
 
-        #region Movie Count
+        #region UTILITY METHODS
         private static int MovieCount(int page)
         {
             if (page < 1) page = 1;
             if (page > 500) page = 500;
             return page;
+        }
+        #endregion
+
+        #region HELPER METHODS
+        private void ProcessMoviePosters(List<Movie> movies)
+        {
+            foreach (var movie in movies)
+            {
+                movie.PosterPath = string.IsNullOrWhiteSpace(movie.PosterPath) ? _defaultPosterPath
+                    : $"{_baseImageUrl}{movie.PosterPath}";
+
+            }
         }
         #endregion
     }
