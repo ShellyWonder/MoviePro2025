@@ -29,7 +29,7 @@ namespace MoviePro2025.Models
         public float Popularity { get; set; }
 
         [JsonPropertyName("poster_path")]
-        public string poster_path { get; set; } = string.Empty;
+        public string PosterPath { get; set; } = string.Empty;
         
         [JsonPropertyName("release_date")]
         public string ReleaseDate { get; set; } = string.Empty;
