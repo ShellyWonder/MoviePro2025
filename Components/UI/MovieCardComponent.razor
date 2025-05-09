@@ -2,24 +2,34 @@
 
 
 <div class="movieCard card h-100">
-    <img src="/img/posterplaceholder.png" class="card-img-top" alt="Movie Poster Placeholder" />
+    <img src="@Movie.PosterPath" class="card-img-top" alt="Movie Poster Placeholder" />
     <div class="card-body border border-top">
         <div class="card-title fw-bold 1h-1">@*1h-1 = line height 1*@
             <h5 class="card-title">
-                Movie Title
+                @Movie.Title.ToUpper()
             </h5>
         </div>
         <div class="card-text 1h-1 fst-italic">
-            <span class="badge bg-primary">Release Date: May 9, 2025</span>
+            <span class="badge bg-primary">Release Date:
+                @(DateTime.TryParse(Movie.ReleaseDate, out var parsedDate)
+                    ? parsedDate.ToString("MMMM dd, yyyy")
+                    : "Release date not available.")
+            </span>
         </div>
+         <!-- Spacer div to fill available space -->
+            <div class="flex-grow-1"></div>
+            <div class="d-flex justify-content-center">
+                <StarRatingComponent VoteAverage="Movie.VoteAverage" />
+            </div>
     </div>
     <div class="card-footer  movieCardFooter d-flex justify-content-between">
         <button class="btn btn-outline-primary"> Add To Favorites</button>
-        <a href="moviedetails" class="btn btn-primary">Details</a>
+        <a href="/movie/@Movie.Id" class="btn btn-primary">Details</a>
     </div>
 </div>
 
 
 @code {
-
+    [Parameter,EditorRequired]
+    public Movie? Movie { get; set; } 
 }

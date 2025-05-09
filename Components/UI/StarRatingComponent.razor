@@ -1,0 +1,37 @@
+﻿@* StarRatingComponent *@
+<div class="rating d-flex align-items-center">
+    @foreach (var star in GenerateStars())
+    {
+        <i class="bi @star me-1"></i>
+    }
+</div>
+@code {
+    [Parameter]
+    public double VoteAverage { get; set; }
+
+    private IEnumerable<string> GenerateStars()
+    {
+        var rating = VoteAverage * 10; // Convert to percentage
+        int fullStars = (int)(rating / 20);
+        bool hasHalfStar = rating % 20 >= 10;
+        int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+        for (int i = 0; i < fullStars; i++)
+        {
+            yield return "bi-star-fill"; // Full star
+        }
+
+        if (hasHalfStar)
+        {
+            yield return "bi-star-half"; // Half star
+        }
+
+        for (int i = 0; i < emptyStars; i++)
+        {
+            yield return "bi-star"; // Empty star
+        }
+    }
+}
+
+
+
