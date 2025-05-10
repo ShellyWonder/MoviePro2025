@@ -32,7 +32,7 @@ namespace MoviePro2025.Services
                 Console.WriteLine("Error retrieving favorites from local storage.");
             }
             return movies;
-        } 
+        }
         #endregion
 
         #region SAVE (SET TO LOCAL STORAGE)FAVORITES 
@@ -54,7 +54,7 @@ namespace MoviePro2025.Services
 
                 Console.WriteLine($"Error saving favorites to local storage: {ex.Message}");
             }
-        } 
+        }
         #endregion
         #region UPDATES FAVORITES LIST
         /// <summary>
@@ -71,7 +71,37 @@ namespace MoviePro2025.Services
                 currentMovies.Add(movie);
                 await SaveFavoritesAsync(currentMovies);
             }
-        } 
+        }
+        #endregion
+
+        #region REMOVE MOVIE FROM FAVORITES
+        /// <summary>
+        /// /// Removes a movie from the favorites list and saves the updated list to local storage.
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
+        public async Task RemoveFavoriteAsync(Movie movie)
+        {
+            var currentMovies = await GetFavoritesAsync();
+            currentMovies = currentMovies.Where(f => f.Id != movie.Id).ToList();
+            
+              await SaveFavoritesAsync(currentMovies);
+            
+        }
+        #endregion
+
+        #region IsFavorite
+        /// <summary>
+        /// Checks if a movie is in the favorites list.
+        /// </summary>
+        /// <param name="id">id of the queried movie</param>
+        /// <returns></returns>
+        public async Task<bool> IsFavoriteAsync(int id)
+        {
+            var currentMovies = await GetFavoritesAsync();
+            bool isFavorite = currentMovies.Any(f => f.Id == id);
+            return isFavorite;
+        }
         #endregion
     }
 }
