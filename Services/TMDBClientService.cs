@@ -42,19 +42,20 @@ namespace MoviePro2025.Services
 
         }
         #endregion
-        //#region PopularMovies 
-        //public async Task<PageResponse<PopularMovie>?> GetPopularMoviesAsync(int page = 1)
-        //{
-        //    page = MovieCount(page);
+        #region PopularMovies 
+        public async Task<MovieListResponse> GetPopularMoviesAsync(int page = 1)
+        {
+            page = MovieCount(page);
 
-        //    var response = await _httpClient.GetFromJsonAsync<PageResponse<PopularMovie>>($"movie/popular?page={page}&language=en-US") 
-        //                                                                                                       ?? throw new Exception("No movie data returned");
-        //    return response;
-        //}
-        //#endregion
+            var response = await _httpClient.GetFromJsonAsync<MovieListResponse>($"movie/popular?page={page}&region=US&language=en-US")
+                                                                                                               ?? throw new Exception("No movie data returned");
+            ProcessMoviePosters(response.Results);
+            return response;
+        }
+        #endregion
 
 
-        //#region TopRated
+        //#region Favorites
         //public  async Task<PageResponse<TopRated>?> GetTopRatedAsync(int page = 1)
         //{
         //    page = MovieCount(page);
@@ -64,16 +65,7 @@ namespace MoviePro2025.Services
         //}
         //#endregion
 
-        //#region Upcoming
-        //public async Task<PageResponse<Upcoming>?> GetUpcomingAsync(int page = 1)
-        //{
-        //    page = MovieCount(page);
-
-        //    var response = await _httpClient.GetFromJsonAsync<PageResponse<Upcoming>>($"movie/upcoming?page={page}")
-        //                                                                                                ?? throw new Exception("No movie data returned");
-        //    return response;
-        //}
-        //#endregion
+        
 
         //#region MovieDetails
         //public Task<MovieDetails?> GetMovieDetailsAsync(int id)
