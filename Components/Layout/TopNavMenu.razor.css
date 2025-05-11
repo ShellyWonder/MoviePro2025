@@ -8,11 +8,7 @@
     --bs-nav-link-hover-color: var(--sjw-theme-400);
 }
 
-.dropdown-menu {
-    background-color: var(--sjw-theme-900);
-   
-}
-/** "has"checks to see if something is on a link */
-.dropdown:has(.nav-link.active) .dropdown-toggle {
-    color: var(--bs-navbar-active-color);
+::deep form .form-control {
+    background-color: var(--sjw-theme-600);
+    
 }

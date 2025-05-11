@@ -1,0 +1,80 @@
+﻿@*Search*@
+@page "/search"
+@inject TMDBClientService TMDBClientService
+
+<PageTitle>Search Results</PageTitle>
+<div class="container-xxl py-3">
+    <h1>
+        <i class="bi bi-search text-success"></i>
+        Search Results
+    </h1>
+    <p class="lead italic">
+        Results matching your search
+    </p>
+    @if (searchResults is null)
+    {
+
+        <div class="d-flex justify-content-center align-items-center">
+            @if (string.IsNullOrEmpty(Query))
+            {
+                <h2 class="text-muted">Use the search box at the top of the page to search for movies</h2>
+            }
+            else if (isLoading)
+            {
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading Search Results...</span>
+                </div>
+            }
+            else
+            {
+                <h2 class="text-muted">No Results Found</h2>
+            }
+        </div>
+    }
+    else
+    {
+        @if (searchResults.TotalResults == 0)
+        {
+            <div class="d-flex justify-content-center align-items-center py-5">
+                <h2 class="text-muted">No search results available for search @Query</h2>
+            </div>
+        }
+        <div class="row g-3  row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            @foreach (var movie in searchResults.Results)
+            {
+                <div class="col">
+                    <MovieCardComponent Movie="movie" />
+                </div>
+            }
+        </div>
+    }
+
+</div>
+@code {
+    [SupplyParameterFromQuery]
+    private string Query { get; set; } = string.Empty;
+
+    private MovieListResponse? searchResults;
+    private bool isLoading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(Query))
+            {
+            isLoading = true;
+            StateHasChanged();
+            searchResults = await TMDBClientService.SearchMoviesByTitleAsync(Query);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error loading movies: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

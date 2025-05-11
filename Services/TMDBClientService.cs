@@ -4,6 +4,7 @@
 //using MoviePro2025.Models.TMDBMovieLists;
 using MoviePro2025.Models;
 using System.Net.Http.Json;
+using System.Web;
 
 
 namespace MoviePro2025.Services
@@ -54,6 +55,29 @@ namespace MoviePro2025.Services
         }
         #endregion
 
+        #region GET Movie Search
+        /// <summary>
+        /// Searches for movies by title.
+        /// </summary>
+        /// <param name="title">User supplied via search input("Query") passed into call as encoded title.</param>
+        /// <param name="page">Used for pagination</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<MovieListResponse?>SearchMoviesByTitleAsync(string title, int page = 1)
+        {
+            page = MovieCount(page);
+            // encode the title to make it URL safe
+            string encodedTitle = HttpUtility.UrlEncode(title);
+            var adult = false;
+            var region = "US";
+            var language = "en-US";
+            var response = await _httpClient.GetFromJsonAsync<MovieListResponse>($"search/movie?query={encodedTitle}&include_adult={adult}&region={region}&language={language}&page={page}")
+                                                                       ?? throw new Exception("No search data returned");
+            ProcessMoviePosters(response.Results);
+            return response;
+        }
+        #endregion
+
 
         //#region Favorites
         //public  async Task<PageResponse<TopRated>?> GetTopRatedAsync(int page = 1)
@@ -65,7 +89,7 @@ namespace MoviePro2025.Services
         //}
         //#endregion
 
-        
+
 
         //#region MovieDetails
         //public Task<MovieDetails?> GetMovieDetailsAsync(int id)
@@ -74,19 +98,6 @@ namespace MoviePro2025.Services
         //}
         //#endregion
 
-        //#region GET Movie Search
-        //public Task<PageResponse<Movie>?> SearchMoviesByTitle(string title, int page=1)
-        //{
-        //    page = MovieCount(page);
-        //    // encode the title to make it URL safe
-        //    string encodedTitle = HttpUtility.UrlEncode(title);
-        //    var adult = false;
-        //    var language = "en-US";
-        //    var response = _httpClient.GetFromJsonAsync<PageResponse<Movie>?>($"search/movie?query={encodedTitle}&include_adult={adult}&language={language}&page={page}")
-        //                                                               ?? throw new Exception("No search data returned");
-        //    return response;
-        //}
-        //#endregion
 
         //#region GET PERSON SEARCH
         //public Task<PageResponse<PersonSearchResult>?> SearchMoviesByPerson(string name, int page = 1)

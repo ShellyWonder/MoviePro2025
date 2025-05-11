@@ -1,5 +1,5 @@
 ﻿@*TopNavMenuComponent*@
-
+@inject NavigationManager _navManager
 <nav class="navbar navbar-expand-lg navStyle" data-bs-theme="dark">
     <div class="container-xxl">
         <a href="/" class="me-3">
@@ -38,10 +38,24 @@
                 </li>
 
             </ul>
+            <form class="d-flex" role="search">
+                <InputText class="form-control  form-control-sm me-2"
+                           type="search" name="query"
+                           placeholder="Search"
+                           aria-label="Search" 
+                           @bind-Value="Query" />
+                           <button class="btn btn-outline-primary btn-sm" type="button" @onclick="HandleSearch">Search</button>
+            </form>
         </div>
     </div>
 </nav>
 
 @code {
+    private string Query { get; set; } = string.Empty;
 
+    private void HandleSearch()
+    {
+        // passing form value to the search results page
+        _navManager.NavigateTo(string.IsNullOrEmpty(Query) ? "search" : $"search?query={Query}");
+    }
 }
