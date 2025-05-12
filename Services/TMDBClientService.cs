@@ -14,6 +14,7 @@ namespace MoviePro2025.Services
         private readonly HttpClient _httpClient;
         private readonly string _baseImageUrl;
         private const string _defaultPosterPath = "/img/PosterPlaceHolder.png"; // Default poster path if none is provided
+        private const string _defaultBackdropPath = "/img/PosterPlaceHolder.png"; // Default backdrop path if none is provided
 
         #region CONSTRUCTOR/CONFIG
         public TMDBClientService(HttpClient httpClient, IConfiguration config)
@@ -79,7 +80,7 @@ namespace MoviePro2025.Services
         #endregion
 
 
-        //#region Favorites
+        //#region TopRated
         //public  async Task<PageResponse<TopRated>?> GetTopRatedAsync(int page = 1)
         //{
         //    page = MovieCount(page);
@@ -89,14 +90,20 @@ namespace MoviePro2025.Services
         //}
         //#endregion
 
+        #region MovieDetails
+        public  async Task<MovieDetails> GetMovieDetailsAsync(int movieId)
+        {
+            var movie = await _httpClient.GetFromJsonAsync<MovieDetails>($"movie/{movieId}")
+                                                                         ?? throw new Exception("No movie data returned");
+            //not using ProcessMoviePosters here because we are not returning a list of movies just a single movie
+            movie.PosterPath = string.IsNullOrWhiteSpace(movie.PosterPath) ? _defaultPosterPath
+                    : $"{_baseImageUrl}{movie.PosterPath}";
 
-
-        //#region MovieDetails
-        //public Task<MovieDetails?> GetMovieDetailsAsync(int id)
-        //{
-        //    return _httpClient.GetFromJsonAsync<MovieDetails>($"movie/{id}");
-        //}
-        //#endregion
+            movie.BackdropPath = string.IsNullOrEmpty(movie.BackdropPath) ? _defaultBackdropPath
+                    : $"{_baseImageUrl}{movie.BackdropPath}";
+            return movie;
+        }
+        #endregion
 
 
         //#region GET PERSON SEARCH

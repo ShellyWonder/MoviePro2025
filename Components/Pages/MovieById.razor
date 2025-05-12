@@ -3,34 +3,9 @@
 @inject TMDBClientService TMDBClientService
 @inject NavigationManager _navManager
 <PageTitle>Movie Details</PageTitle>
+
 <div class="container-xxl py-3">
-    <h1>
-        <i class="bi bi-film text-primary"></i>
-        Movie Details - @MovieId
-    </h1>
-    <p class="lead italic">
-        Movie details and information
-    </p>
-    @* @if (movie is null)
-    {
-        <div class="d-flex justify-content-center align-items-center">
-            @if (isLoading)
-            {
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            }
-            else
-            {
-                <h2>No Movie Found</h2>
-            }
-        </div>
-    }
-    else
-    {
-        <MovieDetailsComponent Movie="movie" />
-    }
- *@
+    
 
 </div>
 
@@ -38,8 +13,28 @@
 @code {
     [Parameter]
     public int MovieId { get; set; }
-    
-    private Movie? movie;
+
+    private MovieDetails? movie;
 
     private bool isLoading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            isLoading = true;
+            movie = await TMDBClientService.GetMovieDetailsAsync(MovieId);
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine($"Error fetching movie details: {ex.Message}");
+        }
+        finally
+        {
+            // Ensure loading state is reset even if an error occurs
+            isLoading = false;
+        }
     }
+}
