@@ -1,7 +1,8 @@
 ﻿@* MovieDetais*@
 @page "/movie/{movieId:int}"
-@inject TMDBClientService TMDBClientService
+@inject TMDBClientService _TMDBClientService
 @inject NavigationManager _navManager
+@inject IJSRuntime _JS
 
 @if (movie is not null)
 {
@@ -73,8 +74,8 @@
                             {
                                 <div id="btn-trailer" class="mt-3">
                                     <button class="btn btn-outline-warning"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#movie-modal">
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#movie-modal">
                                         <i class="bi bi-play"></i>
                                         Play Trailer
                                     </button>
@@ -93,7 +94,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content modal-background">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-title"> Movie Title</h5>
+                <h5 class="modal-title" id="modal-title">@(movie?.Title ?? "Movie Trailer")</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="bi bi-x"></i>
                 </button>
@@ -128,8 +129,8 @@
         try
         {
             isLoading = true;
-            movie = await TMDBClientService.GetMovieDetailsAsync(MovieId);
-            movieTrailer = await TMDBClientService.GetMovieTrailerAsync(MovieId);
+            movie = await _TMDBClientService.GetMovieDetailsAsync(MovieId);
+            movieTrailer = await _TMDBClientService.GetMovieTrailerAsync(MovieId);
         }
         catch (Exception ex)
         {
@@ -140,6 +141,20 @@
         {
             // Ensure loading state is reset even if an error occurs
             isLoading = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await using var jsModule = await _JS.InvokeAsync<IJSObjectReference>("import", "./Components/Pages/MovieById.razor.js");
+        if (movieTrailer is not null)
+        {
+            string trailerUrl = $"https://www.youtube.com/embed/{movieTrailer.Key}";
+            await jsModule.InvokeVoidAsync("initVideoPlayer", trailerUrl);
+        }
+        else
+        {
+            await jsModule.InvokeVoidAsync("initVideoPlayer", string.Empty);
         }
     }
 }

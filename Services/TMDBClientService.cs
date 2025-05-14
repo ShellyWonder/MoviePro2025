@@ -14,7 +14,7 @@ namespace MoviePro2025.Services
         private readonly HttpClient _httpClient;
         private readonly string _baseImageUrl;
         private const string _defaultPosterPath = "/img/PosterPlaceHolder.png"; // Default poster path if none is provided
-        private const string _defaultBackdropPath = "/img/PosterPlaceHolder.png"; // Default backdrop path if none is provided
+        private const string _defaultBackdropPath = "/img/1920_backdrop.jpg"; // Default backdrop path if none is provided
 
         #region CONSTRUCTOR/CONFIG
         public TMDBClientService(HttpClient httpClient, IConfiguration config)
