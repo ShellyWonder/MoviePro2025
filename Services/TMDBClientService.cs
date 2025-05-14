@@ -105,6 +105,18 @@ namespace MoviePro2025.Services
         }
         #endregion
 
+        #region GET MOVIE VIDEOS
+        public async Task<Video>? GetMovieTrailerAsync(int movieId)
+        {
+            var videos = await _httpClient.GetFromJsonAsync<MovieVideosResponse>($"movie/{movieId}/videos?language=en-US")
+                                                                                                               ?? throw new Exception("No video data returned");
+
+            Video movieTrailer = videos.Results.FirstOrDefault(v => v.Type.Contains("Trailer", StringComparison.OrdinalIgnoreCase)
+                                                                 && v.Site.Contains("YouTube", StringComparison.OrdinalIgnoreCase))
+                                                                 ?? throw new Exception("No video data returned");
+            return movieTrailer;
+        }
+        #endregion
 
         //#region GET PERSON SEARCH
         //public Task<PageResponse<PersonSearchResult>?> SearchMoviesByPerson(string name, int page = 1)
