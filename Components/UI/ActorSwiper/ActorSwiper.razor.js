@@ -1,0 +1,1 @@
+﻿// ActorSwiper.razor.js 

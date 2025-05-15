@@ -16,6 +16,7 @@ namespace MoviePro2025.Services
         private readonly string _baseImageUrl;
         private const string _defaultPosterPath = "/img/PosterPlaceHolder.png"; // Default poster path if none is provided
         private const string _defaultBackdropPath = "/img/1920_backdrop.jpg"; // Default backdrop path if none is provided
+        private const string _defaultProfilePath = "/img/ProfilePlaceHolder.png"; // Default cast profile path if none is provided
 
         #region CONSTRUCTOR/CONFIG
         public TMDBClientService(HttpClient httpClient, IConfiguration config)
@@ -45,6 +46,7 @@ namespace MoviePro2025.Services
 
         }
         #endregion
+
         #region PopularMovies 
         public async Task<MovieListResponse> GetPopularMoviesAsync(int page = 1)
         {
@@ -119,6 +121,28 @@ namespace MoviePro2025.Services
         }
         #endregion
 
+        #region GET CAST/CREW CREDITS
+        public async Task<CreditsResponse> GetCreditsByMovieIdAsync(int movieId)
+        {
+            var credits = await _httpClient.GetFromJsonAsync<CreditsResponse?>($"movie/{movieId}/credits?language=en-US")
+                                                       ?? throw new Exception("No cast data returned");
+
+            foreach (var cast in credits.Cast)
+            {
+                cast.ProfilePath = string.IsNullOrEmpty(cast.ProfilePath) ? _defaultProfilePath
+                    : $"{_baseImageUrl}{cast.ProfilePath}";
+            }
+            // Process crew profiles add feature later
+            //foreach (var crew in credits.Crew)
+            //{
+            //    crew.ProfilePath = string.IsNullOrEmpty(crew.ProfilePath) ? _defaultProfilePath
+            //        : $"{_baseImageUrl}{crew.ProfilePath}";
+            //}
+           
+            return credits;
+        }
+        #endregion
+
         //#region GET PERSON SEARCH
         //public Task<PageResponse<PersonSearchResult>?> SearchMoviesByPerson(string name, int page = 1)
         //{
@@ -143,7 +167,6 @@ namespace MoviePro2025.Services
         //     return response;
         // }
 
-
         // #endregion
 
         //#region ACTOR(PERSON) DETAILS
@@ -154,15 +177,6 @@ namespace MoviePro2025.Services
         //    return response;
         //}
 
-        //#endregion
-
-        //#region GET CAST/CREW CREDITS
-        //public async Task<Credit?>GetCreditsByMovieIdAsync(int id)
-        //{
-        //   var response = await _httpClient.GetFromJsonAsync<Credit?>($"movie/{id}/credits?language=en-US") 
-        //                                              ?? throw new Exception("No cast data returned");
-        //    return response;
-        //}
         //#endregion
 
         //#region GET MOVIE CREDITS BY PERSON ID

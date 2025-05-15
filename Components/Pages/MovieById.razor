@@ -75,8 +75,8 @@
                             {
                                 <div id="btn-trailer" class="mt-3">
                                     <button class="btn btn-outline-warning"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#movie-modal">
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#movie-modal">
                                         <i class="bi bi-play"></i>
                                         Play Trailer
                                     </button>
@@ -85,6 +85,15 @@
                             }
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-xl py-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Top Billed Cast</h3>
+                    <ActorSwiper Actors ="actors"/>
                 </div>
             </div>
         </div>
@@ -122,6 +131,7 @@
 
     private MovieDetails? movie;
     private Video? movieTrailer;
+    private List<Cast> actors = [];
 
     private bool isLoading = true;
 
@@ -132,6 +142,9 @@
             isLoading = true;
             movie = await _TMDBClientService.GetMovieDetailsAsync(MovieId);
             movieTrailer = await _TMDBClientService.GetMovieTrailerAsync(MovieId);
+            var credits = await _TMDBClientService.GetCreditsByMovieIdAsync(MovieId);
+            actors = credits.Cast.Take(10).ToList();
+
         }
         catch (Exception ex)
         {
