@@ -1,8 +1,9 @@
-﻿//using MoviePro2025.Models.Credits;
+﻿using MoviePro2025.Models.Credits;
 //using MoviePro2025.Models.Providers;
 //using MoviePro2025.Models.Search;
 //using MoviePro2025.Models.TMDBMovieLists;
 using MoviePro2025.Models;
+using MoviePro2025.Models.MovieModels;
 using System.Net.Http.Json;
 using System.Web;
 
@@ -106,11 +107,11 @@ namespace MoviePro2025.Services
         #endregion
 
         #region GET MOVIE VIDEOS
-        public async Task<Video>? GetMovieTrailerAsync(int movieId)
+        public async Task<Video> GetMovieTrailerAsync(int movieId)
         {
             var videos = await _httpClient.GetFromJsonAsync<MovieVideosResponse>($"movie/{movieId}/videos?language=en-US")
                                                                                                                ?? throw new Exception("No video data returned");
-
+            //restricts results to trailer type and youtube site only
             Video movieTrailer = videos.Results.FirstOrDefault(v => v.Type.Contains("Trailer", StringComparison.OrdinalIgnoreCase)
                                                                  && v.Site.Contains("YouTube", StringComparison.OrdinalIgnoreCase))
                                                                  ?? throw new Exception("No video data returned");

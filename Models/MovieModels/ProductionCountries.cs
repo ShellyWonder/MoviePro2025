@@ -1,12 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MoviePro2025.Models
+namespace MoviePro2025.Models.MovieModels
 {
-    public class Genre
+    public class ProductionCountries
     {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-
+        
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
     }

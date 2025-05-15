@@ -1,5 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using MoviePro2025.Models;
+using MoviePro2025.Models.MovieModels;
 using System.Text.Json;
 
 namespace MoviePro2025.Services

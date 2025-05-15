@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MoviePro2025.Models
+namespace MoviePro2025.Models.MovieModels
 {
 
     public class MovieDetails
